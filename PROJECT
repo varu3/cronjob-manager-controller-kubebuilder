@@ -1,0 +1,16 @@
+domain: varu3.me
+layout:
+- go.kubebuilder.io/v3
+projectName: cronjob-manager-controller-kubebuilder
+repo: github.com/varu3/cronjob-manager-controller-kubebuilder
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: varu3.me
+  group: cronjobmanager
+  kind: CronjobManager
+  path: github.com/varu3/cronjob-manager-controller-kubebuilder/api/v1beta1
+  version: v1beta1
+version: "3"

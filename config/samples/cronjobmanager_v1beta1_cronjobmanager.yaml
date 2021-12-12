@@ -1,0 +1,6 @@
+apiVersion: cronjobmanager.varu3.me/v1beta1
+kind: CronjobManager
+metadata:
+  name: cronjobmanager-sample
+spec:
+  # TODO(user): Add fields here

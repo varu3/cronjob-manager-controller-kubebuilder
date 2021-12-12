@@ -1,0 +1,20 @@
+# permissions for end users to view cronjobmanagers.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cronjobmanager-viewer-role
+rules:
+- apiGroups:
+  - cronjobmanager.varu3.me
+  resources:
+  - cronjobmanagers
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cronjobmanager.varu3.me
+  resources:
+  - cronjobmanagers/status
+  verbs:
+  - get

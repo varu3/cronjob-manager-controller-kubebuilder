@@ -1,0 +1,24 @@
+# permissions for end users to edit cronjobmanagers.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cronjobmanager-editor-role
+rules:
+- apiGroups:
+  - cronjobmanager.varu3.me
+  resources:
+  - cronjobmanagers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - cronjobmanager.varu3.me
+  resources:
+  - cronjobmanagers/status
+  verbs:
+  - get
