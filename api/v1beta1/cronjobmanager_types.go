@@ -24,23 +24,25 @@ import (
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
 // CronjobManagerSpec defines the desired state of CronjobManager
-type CronjobManagerSpec struct {
+type CronJobManagerSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
 	// Foo is an example field of CronjobManager. Edit cronjobmanager_types.go to remove/update
-	Cronjobs []CronjobSettings `json:"cronjobSettings,omitempty"`
+	Image    string            `json:"image,omitempty"`
+	TZ       string            `json:"tz,omitempty"`
+	Cronjobs []CronJobSettings `json:"cronjobSettings,omitempty"`
 }
 
-type CronjobSettings struct {
-	Name    string `json:"name,omitempty"`
-	Cron    string `json:"cron"`
-	Command string `json:"command"`
-	Type    string `json:"type"`
+type CronJobSettings struct {
+	Name     string   `json:"name,omitempty"`
+	Schedule string   `json:"schedule"`
+	Command  []string `json:"command"`
+	Type     string   `json:"type"`
 }
 
 // CronjobManagerStatus defines the observed state of CronjobManager
-type CronjobManagerStatus struct {
+type CronJobManagerStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 }
@@ -49,23 +51,23 @@ type CronjobManagerStatus struct {
 //+kubebuilder:subresource:status
 
 // CronjobManager is the Schema for the cronjobmanagers API
-type CronjobManager struct {
+type CronJobManager struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   CronjobManagerSpec   `json:"spec,omitempty"`
-	Status CronjobManagerStatus `json:"status,omitempty"`
+	Spec   CronJobManagerSpec   `json:"spec,omitempty"`
+	Status CronJobManagerStatus `json:"status,omitempty"`
 }
 
 //+kubebuilder:object:root=true
 
-// CronjobManagerList contains a list of CronjobManager
-type CronjobManagerList struct {
+// CronJobManagerList contains a list of CronJobManager
+type CronJobManagerList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []CronjobManager `json:"items"`
+	Items           []CronJobManager `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&CronjobManager{}, &CronjobManagerList{})
+	SchemeBuilder.Register(&CronJobManager{}, &CronJobManagerList{})
 }

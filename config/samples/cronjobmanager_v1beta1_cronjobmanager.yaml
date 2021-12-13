@@ -1,6 +1,15 @@
 apiVersion: cronjobmanager.varu3.me/v1beta1
-kind: CronjobManager
+kind: CronJobManager
 metadata:
   name: cronjobmanager-sample
 spec:
-  # TODO(user): Add fields here
+  image: ubuntu:latest
+  cronjobSettings:
+    - name: hoge-runner
+      schedule: "0,5,10,15,20,25,30,35,40,45,50,55 * * * *"
+      command: ["echo", "hoge"]
+      type: "general"
+    - name: huga-runner
+      schedule: "0,5,10,15,20,25,30,35,40,45,50,55 * * * *"
+      command: ["echo", "huga"]
+      type: "general"
