@@ -55,10 +55,12 @@ func (r *CronJobManagerReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 	logger := log.FromContext(ctx)
 
 	var cjMng cronjobmanagerv1beta1.CronJobManager
+	logger.Info("Fetching CronJobManager resource.")
 	err := r.Get(ctx, req.NamespacedName, &cjMng)
 	if errors.IsNotFound(err) {
 		return ctrl.Result{}, nil
 	}
+
 	if err != nil {
 		logger.Error(err, "unable to get CronJobManager", "name", req.NamespacedName)
 		return ctrl.Result{}, err
@@ -66,6 +68,12 @@ func (r *CronJobManagerReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 
 	if !cjMng.ObjectMeta.DeletionTimestamp.IsZero() {
 		return ctrl.Result{}, nil
+	}
+
+	err = r.cleanupOwnedResources(ctx, cjMng)
+	if err != nil {
+		logger.Error(err, "unnable to clean up old cronjob resource for this CronJobManager")
+		return ctrl.Result{}, err
 	}
 
 	err = r.reconcileCronJob(ctx, cjMng)
@@ -114,34 +122,70 @@ func (r *CronJobManagerReconciler) reconcileCronJob(ctx context.Context, cjMng c
 		}
 
 		if op != controllerutil.OperationResultNone {
-			logger.Info("reconcile CronJOb successfully", "op", op)
+			logger.Info("reconcile CronJob successfully", "op", op)
 		}
 	}
 
 	return nil
 }
 
-// func (r *CronJobManagerReconciler) updateStatus(ctx context.Context, mdView cronjobmanagerv1beta1.CronJobManager) (ctrl.Result, error) {
-// 	var cjs batchv1.CronJobList
-// 	err := r.List(ctx, &cjs, &client.ListOptions{
-// 		Namespace: mdView.Namespace,
-// 	})
-// 	if err != nil {
-// 		return ctrl.Result{}, err
-// 	}
-//
-// 	var status cronjobmanagerv1beta1.CronJobManagerStatus
-// 	for _, ecj := range cjs.Items {
-// 		for _, w := range mdView.Spec.Cronjobs {
-// 			if ecj.Name != w.Name {
-// 				return ctrl.Result{}, err
-// 			}
-// 		}
-// 	}
-// }
+func (r *CronJobManagerReconciler) cleanupOwnedResources(ctx context.Context, cjMng cronjobmanagerv1beta1.CronJobManager) error {
+	logger := log.FromContext(ctx)
+	logger.Info("finding existing CronJob for CronJobManager resource")
+
+	var cronjobs batchv1.CronJobList
+	if err := r.List(ctx, &cronjobs, client.InNamespace(cjMng.Namespace), client.MatchingFields(map[string]string{cronjobOwnerKey: cjMng.Name})); err != nil {
+		return err
+	}
+
+	for _, existsCronjob := range cronjobs.Items {
+		contain := false
+		for _, cjMngCronjob := range cjMng.Spec.Cronjobs {
+			if existsCronjob.Name == cjMngCronjob.Name {
+				// containしていたら
+				contain = true
+			}
+		}
+
+		if !contain {
+			if err := r.Delete(ctx, &existsCronjob); err != nil {
+				logger.Error(err, "failed to delete CronJob resources.")
+				return err
+			}
+			logger.Info("delete cronjob resource: " + existsCronjob.Name)
+		}
+	}
+
+	return nil
+}
+
+var (
+	cronjobOwnerKey = ".metadata.controller"
+	apiGVStr        = cronjobmanagerv1beta1.GroupVersion.String()
+)
 
 // SetupWithManager sets up the controller with the Manager.
 func (r *CronJobManagerReconciler) SetupWithManager(mgr ctrl.Manager) error {
+	ctx := context.Background()
+
+	err := mgr.GetFieldIndexer().IndexField(ctx, &batchv1.CronJob{}, cronjobOwnerKey, func(rawObj client.Object) []string {
+		cronjob := rawObj.(*batchv1.CronJob)
+		owner := metav1.GetControllerOf(cronjob)
+		if owner == nil {
+			return nil
+		}
+
+		if owner.APIVersion != apiGVStr || owner.Kind != "CronJobManager" {
+			return nil
+		}
+
+		return []string{owner.Name}
+	})
+
+	if err != nil {
+		return err
+	}
+
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&cronjobmanagerv1beta1.CronJobManager{}).
 		Owns(&batchv1.CronJob{}).
