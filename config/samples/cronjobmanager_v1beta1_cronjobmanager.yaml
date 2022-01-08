@@ -4,12 +4,8 @@ metadata:
   name: cronjobmanager-sample
 spec:
   image: ubuntu:latest
-  cronjobSettings:
+  cronjobs:
     - name: hoge-runner
       schedule: "0,5,10,15,20,25,30,35,40,45,50,55 * * * *"
       command: ["echo", "hoge"]
-      type: "general"
-    - name: huga-runner
-      schedule: "0,5,10,15,20,25,30,35,40,45,50,55 * * * *"
-      command: ["echo", "huga"]
       type: "general"
