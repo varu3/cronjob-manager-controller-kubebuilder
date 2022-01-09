@@ -21,6 +21,7 @@ import (
 
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/client-go/tools/record"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
@@ -35,7 +36,8 @@ import (
 // CronjobManagerReconciler reconciles a CronjobManager object
 type CronJobManagerReconciler struct {
 	client.Client
-	Scheme *runtime.Scheme
+	Scheme   *runtime.Scheme
+	Recorder record.EventRecorder
 }
 
 //+kubebuilder:rbac:groups=cronjobmanager.varu3.me,resources=cronjobmanagers,verbs=get;list;watch;create;update;patch;delete
@@ -88,7 +90,7 @@ func (r *CronJobManagerReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 func (r *CronJobManagerReconciler) reconcileCronJob(ctx context.Context, cjMng cronjobmanagerv1beta1.CronJobManager) error {
 	logger := log.FromContext(ctx)
 
-	for _, content := range cjMng.Spec.Cronjobs {
+	for _, content := range cjMng.Spec.CronJobs {
 		cj := &batchv1.CronJob{}
 		cj.SetNamespace(cjMng.Namespace)
 		cj.SetName(content.Name)
@@ -140,7 +142,7 @@ func (r *CronJobManagerReconciler) cleanupOwnedResources(ctx context.Context, cj
 
 	for _, existsCronjob := range cronjobs.Items {
 		contain := false
-		for _, cjMngCronjob := range cjMng.Spec.Cronjobs {
+		for _, cjMngCronjob := range cjMng.Spec.CronJobs {
 			if existsCronjob.Name == cjMngCronjob.Name {
 				// containしていたら
 				contain = true

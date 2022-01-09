@@ -36,7 +36,7 @@ spec:
           spec:
             description: CronjobManagerSpec defines the desired state of CronjobManager
             properties:
-              cronjobSettings:
+              cronjobs:
                 items:
                   properties:
                     command:
@@ -58,8 +58,6 @@ spec:
               image:
                 description: Foo is an example field of CronjobManager. Edit cronjobmanager_types.go
                   to remove/update
-                type: string
-              tz:
                 type: string
             type: object
           status:

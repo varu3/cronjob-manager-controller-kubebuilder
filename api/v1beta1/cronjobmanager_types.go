@@ -29,12 +29,11 @@ type CronJobManagerSpec struct {
 	// Important: Run "make" to regenerate code after modifying this file
 
 	// Foo is an example field of CronjobManager. Edit cronjobmanager_types.go to remove/update
-	Image    string            `json:"image,omitempty"`
-	TZ       string            `json:"tz,omitempty"`
-	Cronjobs []CronJobSettings `json:"cronjobSettings,omitempty"`
+	Image    string          `json:"image,omitempty"`
+	CronJobs []CronJobConfig `json:"cronjobs,omitempty"`
 }
 
-type CronJobSettings struct {
+type CronJobConfig struct {
 	Name     string   `json:"name,omitempty"`
 	Schedule string   `json:"schedule"`
 	Command  []string `json:"command"`
