@@ -1,4 +1,4 @@
-# cronjob-manager-kubebuilder
+# cronjob-manager
 
 cronjob を一つのリソースで複数管理するための controller です
 

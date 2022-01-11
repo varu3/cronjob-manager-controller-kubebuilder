@@ -31,8 +31,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	cronjobmanagerv1beta1 "github.com/varu3/cronjob-manager-kubebuilder/api/v1beta1"
-	"github.com/varu3/cronjob-manager-kubebuilder/controllers"
+	cronjobmanagerv1beta1 "github.com/varu3/cronjob-manager/api/v1beta1"
+	"github.com/varu3/cronjob-manager/controllers"
 	//+kubebuilder:scaffold:imports
 )
 

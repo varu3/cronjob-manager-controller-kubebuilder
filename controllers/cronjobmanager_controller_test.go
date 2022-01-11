@@ -6,7 +6,7 @@ import (
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	cronjobmanagerv1beta1 "github.com/varu3/cronjob-manager-kubebuilder/api/v1beta1"
+	cronjobmanagerv1beta1 "github.com/varu3/cronjob-manager/api/v1beta1"
 	batchv1 "k8s.io/api/batch/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrl "sigs.k8s.io/controller-runtime"
