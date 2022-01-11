@@ -1,4 +1,4 @@
-module github.com/varu3/cronjob-manager-controller-kubebuilder
+module github.com/varu3/cronjob-manager-kubebuilder
 
 go 1.16
 

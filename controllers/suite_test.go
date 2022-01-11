@@ -20,7 +20,7 @@ import (
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	cronjobmanagerv1beta1 "github.com/varu3/cronjob-manager-controller-kubebuilder/api/v1beta1"
+	cronjobmanagerv1beta1 "github.com/varu3/cronjob-manager-kubebuilder/api/v1beta1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"

@@ -27,7 +27,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	cronjobmanagerv1beta1 "github.com/varu3/cronjob-manager-controller-kubebuilder/api/v1beta1"
+	cronjobmanagerv1beta1 "github.com/varu3/cronjob-manager-kubebuilder/api/v1beta1"
 	batchv1 "k8s.io/api/batch/v1beta1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
