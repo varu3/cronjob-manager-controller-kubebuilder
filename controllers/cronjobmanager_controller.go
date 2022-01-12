@@ -43,6 +43,9 @@ type CronJobManagerReconciler struct {
 //+kubebuilder:rbac:groups=cronjobmanager.varu3.me,resources=cronjobmanagers,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=cronjobmanager.varu3.me,resources=cronjobmanagers/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=cronjobmanager.varu3.me,resources=cronjobmanagers/finalizers,verbs=update
+//+kubebuilder:rbac:groups=cronjobmanager.varu3.me,resources=cronjobmanagers,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=batch,resources=cronjobs,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=batch,resources=cronjobs/status,verbs=get
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
