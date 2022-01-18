@@ -13,7 +13,7 @@ metadata:
   name: cronjobmanager-sample
 spec:
   image: ubuntu:latest
-  cronjobSettings:
+  cronjobs:
     - name: hoge-runner
       schedule: "0,5,10,15,20,25,30,35,40,45,50,55 * * * *"
       command: ["echo", "hoge"]
@@ -25,9 +25,9 @@ spec:
 ```
 
 - `image`: 全体で使うコンテナイメージを指定します
-- `cronJobSettings.name`: cronjob の name を指定します
-- `cronJobSettings.schedule`: cron 式でスケジュールを指定します
-- `cronjobSettings.command`: 実行するコマンドを指定します
+- `cronjobs.name`: cronjob の name を指定します
+- `cronjobs.schedule`: cron 式でスケジュールを指定します
+- `cronjobs.command`: 実行するコマンドを指定します
 
 このファイルをデプロイすると以下のように cronjob が作られます
 
